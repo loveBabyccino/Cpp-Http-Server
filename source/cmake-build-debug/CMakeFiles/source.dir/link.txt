@@ -1,1 +1,0 @@
-/opt/rh/devtoolset-8/root/bin/g++ -g CMakeFiles/source.dir/main.cpp.o -o source  buffer/libBuffer.a 

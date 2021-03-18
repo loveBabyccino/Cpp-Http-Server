@@ -1,6 +1,0 @@
-/git_projects/cpp_http_server/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/git_projects/cpp_http_server/cmake-build-debug/CMakeFiles/edit_cache.dir
-/git_projects/cpp_http_server/cmake-build-debug/CMakeFiles/source.dir
-/git_projects/cpp_http_server/cmake-build-debug/buffer/CMakeFiles/edit_cache.dir
-/git_projects/cpp_http_server/cmake-build-debug/buffer/CMakeFiles/rebuild_cache.dir
-/git_projects/cpp_http_server/cmake-build-debug/buffer/CMakeFiles/Buffer.dir
