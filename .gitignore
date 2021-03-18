@@ -32,5 +32,5 @@
 *.app
 
 
-server/.idea
-server/cmake-build-debug
+source/.idea
+source/cmake-build-debug
