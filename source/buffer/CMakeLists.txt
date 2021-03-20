@@ -3,4 +3,4 @@
 aux_source_directory(. DIR_LIB_SRCS)
 
 # 生成链接库
-add_library (Buffer ${DIR_LIB_SRCS})
+add_library (Buffer ${DIR_LIB_SRCS} extentpool.cpp extentpool.h extent.cpp extent.h)

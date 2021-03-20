@@ -50,7 +50,7 @@ public:
     /*
      *  write bytes into the buffer
      * */
-    bool write(const std::string& bytes);
+    bool write(const std::string& content);
 
     /*
      *  read bytes from the buffer

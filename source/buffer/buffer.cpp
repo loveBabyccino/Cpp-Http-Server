@@ -9,9 +9,9 @@ using std::string;
 
 
 Buffer::Buffer(size_t capacity) :
-        _capacity(capacity),
-        _internal_capacity(capacity),
-        _buffer(vector<char>(capacity))
+    _capacity(capacity),
+    _internal_capacity(capacity),
+    _buffer(vector<char>(capacity))
 {
 
 }
@@ -46,14 +46,13 @@ size_t Buffer::writable_size() const
     return _capacity - _write_index;
 }
 
-bool Buffer::write(const std::string& bytes)
+bool Buffer::write(const std::string& content)
 {
-    auto len = bytes.size();
-
+    auto len = content.size();
     if (len > _capacity - _write_index)
         return false;
 
-    std::copy(bytes.cbegin(), bytes.cend(), _buffer.begin() + _write_index);
+    std::copy(content.cbegin(), content.cend(), _buffer.begin() + _write_index);
     _write_index += len;
 
     return true;
