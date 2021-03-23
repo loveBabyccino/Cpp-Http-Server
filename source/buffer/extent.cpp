@@ -6,7 +6,7 @@ using std::atomic_bool;
 using std::string;
 
 
-void Extent::withdraw(Pool& pool, char* data, size_t n)
+void Extent::withdraw(ExtentPool* pool, char* data, size_t n)
 {
     if (_data != nullptr || data == nullptr)
         return;
@@ -109,6 +109,7 @@ std::string Extent::read(unsigned int amount)
         *beg = _data[_reader];
         ++_reader;
         ++beg;
+        --amount;
     }
 
     return output;

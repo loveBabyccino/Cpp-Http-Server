@@ -2,5 +2,8 @@
 # 并将名称保存到 DIR_LIB_SRCS 变量
 aux_source_directory(. DIR_LIB_SRCS)
 
+include_directories("../channel")
+include_directories("../dispatcher")
+
 # 生成链接库
-add_library (Buffer ${DIR_LIB_SRCS} extentpool.cpp extentpool.h extent.cpp extent.h)
+add_library (EventLoop ${DIR_LIB_SRCS} eventloop.cpp)

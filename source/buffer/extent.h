@@ -12,11 +12,10 @@ class ExtentPool;
 
 class Extent
 {
-    using Pool = std::weak_ptr<ExtentPool>;
     using InUseFlag = std::atomic_bool;
 
 public:
-    void withdraw(Pool& pool, char* data, size_t n);
+    void withdraw(ExtentPool* pool, char* data, size_t n);
 
     void deposit();
 
@@ -55,7 +54,7 @@ private:
 
     InUseFlag _in_use { false };
 
-    Pool _pool;
+    ExtentPool* _pool;
 
 };
 
