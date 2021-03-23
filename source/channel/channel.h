@@ -1,7 +1,3 @@
-//
-// Created by jinxd on 2021/3/21.
-//
-
 #ifndef SOURCE_CHANNEL_H
 #define SOURCE_CHANNEL_H
 
@@ -12,14 +8,22 @@ class Channel
 public:
     Channel(int fd, int events);
 
-    void handle_read_event();
+    void set_fd(int fd);
+    int fd() const;
 
-    void handle_write_event();
+    void set_revents(int events);
+    int revents() const;
+
+    void set_val(int val);
+    int val() const;
+
 
 private:
     int _fd;
     int _events;
     int _revents;
+
+    int _val; // this member is for any use
 };
 
 

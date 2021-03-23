@@ -17,14 +17,11 @@ class Poller
 {
     using EpollEvent = epoll_event;
     using EpollEventList = epoll_event*;
-    using InterestedChannels = std::vector<Channel*>;
 
 public:
+    Poller(int max_events);
     Poller(const Poller&) = delete;
     Poller& operator=(const Poller&) = delete;
-
-    Poller(Poller&&) = delete;
-    Poller& operator=(Poller&&) = delete;
 
     void add(int fd, int flags);
 
@@ -32,14 +29,14 @@ public:
 
     void remove(int fd);
 
-    void wait(InterestedChannels& channels, int time_out = -1);
+    int wait(int max_events = 128, int time_out = -1);
 
 private:
     void control(int fd, int flags);
 
 private:
     int _epoll_fd { -1 };
-    EpollEvent _event;
+    EpollEvent _event{};
     EpollEventList _events { nullptr } ;
 };
 

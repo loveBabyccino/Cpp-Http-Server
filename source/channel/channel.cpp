@@ -1,7 +1,3 @@
-//
-// Created by jinxd on 2021/3/21.
-//
-
 #include "channel.h"
 
 Channel::Channel(int fd, int events) :
@@ -10,12 +6,34 @@ Channel::Channel(int fd, int events) :
 
 }
 
-void Channel::handle_read_event()
+void Channel::set_fd(int fd)
 {
-
+    _fd = fd;
 }
 
-void Channel::handle_write_event()
+int Channel::fd() const
 {
-
+    return _fd;
 }
+
+int Channel::revents() const
+{
+    return _revents;
+}
+
+void Channel::set_revents(int events)
+{
+    _revents = events;
+}
+
+void Channel::set_val(int val)
+{
+    _val = val;
+}
+
+int Channel::val() const
+{
+    return _val;
+}
+
+

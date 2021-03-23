@@ -4,21 +4,19 @@
 #include <unordered_map>
 #include <vector>
 
-class epoll_event;
-
+class Poller;
 class Channel;
 class EventLoop;
+
 
 class Dispatcher
 {
     using ChannelMap = std::unordered_map<int, Channel*>;
     using InterestedChannelList = std::vector<Channel>;
-
     using WatchedFDs = std::vector<int>;
 
 public:
-
-    explicit Dispatcher(EventLoop* event_loop);
+    explicit Dispatcher(EventLoop* event_loop, int max_events = 128);
 
     Dispatcher(const Dispatcher&) = delete;
     Dispatcher& operator=(const Dispatcher&) = delete;
@@ -26,28 +24,24 @@ public:
 public:
     void poll(InterestedChannelList* interested_channels);
 
-    void remove_channel(Channel* channel);
+    void set_max_events(int n);
 
     void update_channel(Channel* channel);
 
+    void remove_channel(Channel* channel);
+
     void find_active_channels();
 
-private:
-    void add_watched_fd(int fd, int events);
-
-    void add_channel(int fd, int read, int write, int error);
 
 private:
-    InterestedChannelList* _interested_channels { nullptr };
-
+    Poller* _poller { nullptr };
     EventLoop* _loop { nullptr };
+
     ChannelMap _channel_map;
-    WatchedFDs _fds;
+    InterestedChannelList* _interested_channels { nullptr };
+    WatchedFDs _interested__fds;
 
-    int _epoll_fd;
-    epoll_event* _epoll_event_list { nullptr };
-
-    const int _max_events { 128 };
+    int _max_events { 0 };
 };
 
 

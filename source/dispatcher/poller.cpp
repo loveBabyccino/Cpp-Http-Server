@@ -1,8 +1,16 @@
-//
-// Created by jinxd on 2021/3/22.
-//
-
 #include "poller.h"
+
+#include <cassert>
+#include <cstdlib>
+
+Poller::Poller(int max_events)
+{
+    _epoll_fd = epoll_create(1);
+    assert(("epoll_created error", _epoll_fd == -1));
+
+    _event = epoll_event();
+    auto* event_list = static_cast<epoll_event*>(calloc(max_events, sizeof(_event)));
+}
 
 void Poller::add(int fd, int flags)
 {
@@ -21,10 +29,6 @@ void Poller::remove(int fd)
     epoll_ctl(_epoll_fd, EPOLL_CTL_MOD, fd, nullptr);
 }
 
-void Poller::wait(int time_out)
-{
-
-}
 
 void Poller::control(int fd, int flags)
 {
@@ -35,3 +39,10 @@ void Poller::control(int fd, int flags)
     _event.data.fd = fd;
     _event.events = read_flag | write_flag | error_flag;
 }
+
+int Poller::wait(int max_events, int time_out)
+{
+   return epoll_wait(_epoll_fd, _events, max_events, time_out);
+}
+
+
