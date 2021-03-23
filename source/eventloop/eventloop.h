@@ -10,7 +10,7 @@ class Dispatcher;
 
 class EventLoop
 {
-    using InterestedChannelList = std::vector<Channel>;
+    using Interested_Channel_List = std::vector<Channel>;
     using ThreadID = std::thread::id;
     using RunningFlag = std::atomic_bool;
 
@@ -28,7 +28,7 @@ private:
 
 private:
     Dispatcher* _dispatcher { nullptr };
-    InterestedChannelList _channels;
+    Interested_Channel_List _channels;
     ThreadID _thread_id;
     RunningFlag _running {false };
 };

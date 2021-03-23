@@ -1,5 +1,6 @@
 #include "eventloop.h"
 #include "dispatcher.h"
+#include "channel.h"
 
 #include <cassert>
 
@@ -12,7 +13,7 @@ EventLoop::EventLoop(Dispatcher *dispatcher) :
 
 void EventLoop::validate_thread()
 {
-    assert(("thread violation", _thread_id == std::this_thread::get_id()));
+    assert(("thread violation", _thread_id != std::this_thread::get_id()));
 }
 
 void EventLoop::run()
@@ -24,7 +25,7 @@ void EventLoop::run()
 
     while (_running == true)
     {
-        _dispatcher->poll();
+//        _dispatcher->poll();
     }
 }
 

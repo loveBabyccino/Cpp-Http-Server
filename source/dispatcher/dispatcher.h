@@ -1,8 +1,9 @@
 #ifndef SOURCE_DISPATCHER_H
 #define SOURCE_DISPATCHER_H
 
-#include <unordered_map>
+#include <map>
 #include <vector>
+#include <forward_list>
 
 class Poller;
 class Channel;
@@ -11,9 +12,9 @@ class EventLoop;
 
 class Dispatcher
 {
-    using ChannelMap = std::unordered_map<int, Channel*>;
-    using InterestedChannelList = std::vector<Channel>;
-    using WatchedFDs = std::vector<int>;
+    using Channel_Map = std::map<int, Channel*>;
+    using Interested_Channel_List = std::vector<Channel>;
+    using Interested_FD_List = std::forward_list<int>;
 
 public:
     explicit Dispatcher(EventLoop* event_loop, int max_events = 128);
@@ -22,7 +23,7 @@ public:
     Dispatcher& operator=(const Dispatcher&) = delete;
 
 public:
-    void poll(InterestedChannelList* interested_channels);
+    void poll(Interested_Channel_List* interested_channels);
 
     void set_max_events(int n);
 
@@ -37,9 +38,9 @@ private:
     Poller* _poller { nullptr };
     EventLoop* _loop { nullptr };
 
-    ChannelMap _channel_map;
-    InterestedChannelList* _interested_channels { nullptr };
-    WatchedFDs _interested__fds;
+    Channel_Map _channel_map;
+    Interested_Channel_List* _interested_channels { nullptr };
+    Interested_FD_List _interested_fds;
 
     int _max_events { 0 };
 };
