@@ -6,4 +6,4 @@ include_directories("../channel")
 include_directories("../common")
 
 # 生成链接库
-add_library (Dispatcher ${DIR_LIB_SRCS} dispatcher.cpp poller.cpp poller.h)
+add_library (Dispatcher ${DIR_LIB_SRCS} dispatcher.cpp)
