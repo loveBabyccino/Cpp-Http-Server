@@ -51,7 +51,7 @@ int Poller::wait(Poller_Item_List& poller_items, int max_events, int time_out)
        for (int i = 0; i < epoll_ready; ++i)
        {
            item._fd = _events->data.fd;
-           item._revents = _events->events;
+           item._knownEvents = _events->events;
            poller_items[item._fd] = item;
        }
    }

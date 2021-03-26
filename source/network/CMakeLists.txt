@@ -5,4 +5,4 @@ aux_source_directory(. DIR_LIB_SRCS)
 include_directories(../common)
 
 # 生成链接库
-add_library (Channel ${DIR_LIB_SRCS} channel.cpp)
+add_library (Network ${DIR_LIB_SRCS} socket.cpp)

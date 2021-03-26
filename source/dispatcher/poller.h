@@ -19,7 +19,7 @@ struct PollerItem
     PollerItem(int fd, int events) : _fd(fd), _events(events) {}
     int _fd { -1 };
     int _events { 0 };
-    int _revents { 0 };
+    int _knownEvents { 0 };
 };
 
 class Poller
@@ -28,7 +28,7 @@ public:
     using Poller_Item_List = std::map<int, PollerItem>;
 
 private:
-    using Epoll_Event_List = epoll_event*;
+    using EpollEventList = epoll_event*;
     using Epoll_Event = epoll_event;
 
 public:
@@ -50,7 +50,7 @@ private:
 private:
     int _epoll_fd { -1 };
     Epoll_Event _event{};
-    Epoll_Event_List _events { nullptr } ;
+    EpollEventList _events { nullptr } ;
     Poller_Item_List _poller_items;
 };
 

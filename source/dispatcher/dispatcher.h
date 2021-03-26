@@ -1,46 +1,58 @@
 #ifndef SOURCE_DISPATCHER_H
 #define SOURCE_DISPATCHER_H
 
-#include <map>
-#include <vector>
-#include <forward_list>
+#include "noncopyable.h"
 
-class Poller;
+#include <map>
+#include <memory>
+#include <vector>
+
+
 class Channel;
 class EventLoop;
+class epoll_event;
 
-
-class Dispatcher
+class Dispatcher : NonCopyable
 {
-    using Channel_Map = std::map<int, Channel*>;
-    using Interested_Channel_List = std::vector<Channel>;
-    using Interested_FD_List = std::forward_list<int>;
+    using ObserverdEventLoop = std::weak_ptr<EventLoop>;
+    using ChannelMap = std::map<int, Channel*>;
+    using InterestedChannelList = std::vector<Channel*>;
+    using EpollEventList = std::vector<epoll_event>;
 
 public:
-    explicit Dispatcher(EventLoop* event_loop, int max_events = 128);
-
-    Dispatcher(const Dispatcher&) = delete;
-    Dispatcher& operator=(const Dispatcher&) = delete;
+    enum class EventType
+    {
+        Read,
+        Write,
+        Error
+    };
 
 public:
-    void poll(Interested_Channel_List* interested_channels);
+    explicit Dispatcher(ObserverdEventLoop event_loop, int max_events = 128);
 
-    void set_max_events(int n);
+    void epoll(InterestedChannelList& interested_channels);
 
-    void update_channel(Channel* channel);
+    void setMaxEvents(int n);
 
-    void remove_channel(Channel* channel);
+    void updateChannel(Channel* channel);
 
-    void find_active_channels();
+    void removeChannel(Channel* channel);
 
+    EventType eventType(int type) const;
 
 private:
-    Poller* _poller { nullptr };
-    EventLoop* _loop { nullptr };
+    void eventLoopValidate();
 
-    Channel_Map _channel_map;
-    Interested_Channel_List* _interested_channels { nullptr };
-    Interested_FD_List _interested_fds;
+    void findActiveChannels(int ready, InterestedChannelList& interested_channels);
+
+private:
+    int _epoll_fd { -1 };
+
+    EpollEventList _epoll_event_list;
+
+    ObserverdEventLoop _event_loop;
+
+    ChannelMap _channel_map;
 
     int _max_events { 0 };
 };

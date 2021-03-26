@@ -1,29 +1,36 @@
 #ifndef SOURCE_CHANNEL_H
 #define SOURCE_CHANNEL_H
 
+#include "noncopyable.h"
+
 #include <functional>
 
-class Channel
+class Channel : NonCopyable
 {
-public:
-    Channel(int fd, int events);
+    using EventCallBack = std::function<void()>;
 
-    void set_fd(int fd);
+public:
+    Channel(int fd, int events = 0, int knownEvents = 0);
+
     int fd() const;
 
-    void set_revents(int events);
-    int revents() const;
+    void setKnownEvents(int events);
+    int knownEvents() const;
 
-    void set_val(int val);
-    int val() const;
+    void setExpectedEvents(int events);
+    int expectedEvents() const;
 
+    void handleReadEvent();
+
+    void handleWriteEvent();
 
 private:
     int _fd;
-    int _events;
-    int _revents;
+    int _expected_events;
+    int _knownEvents;
 
-    int _val; // this member is for any use
+    EventCallBack _read_call_back;
+    EventCallBack _write_call_back;
 };
 
 

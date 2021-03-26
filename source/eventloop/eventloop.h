@@ -1,36 +1,54 @@
 #ifndef SOURCE_EVENTLOOP_H
 #define SOURCE_EVENTLOOP_H
 
+#include "noncopyable.h"
+
 #include <thread>
 #include <atomic>
+#include <memory>
 #include <vector>
+
+
+using std::enable_shared_from_this;
 
 class Channel;
 class Dispatcher;
 
-class EventLoop
+
+class EventLoop : NonCopyable, enable_shared_from_this<EventLoop>
 {
-    using Interested_Channel_List = std::vector<Channel>;
+public:
+    using InterestedChannelList = std::vector<Channel*>;
+
+
+private:
+    using ObservedDispatcher = std::shared_ptr<Dispatcher>;
     using ThreadID = std::thread::id;
-    using RunningFlag = std::atomic_bool;
+    using AtomicFlag = std::atomic_bool;
+
 
 public:
-    explicit EventLoop(Dispatcher* dispatcher);
+    EventLoop();
 
-    EventLoop(const EventLoop&) = delete;
-    EventLoop& operator=(const EventLoop&) = delete;
+    ObservedDispatcher dispatcher();
 
     void run();
+
     void stop();
 
-private:
-    void validate_thread();
 
 private:
-    Dispatcher* _dispatcher { nullptr };
-    Interested_Channel_List _channels;
+    void init();
+
+    void thread_validate();
+
+
+private:
+    ObservedDispatcher _dispatcher;
+    InterestedChannelList _channels;
     ThreadID _thread_id;
-    RunningFlag _running {false };
+    AtomicFlag _running {false };
+    AtomicFlag _inited { false };
 };
 
 

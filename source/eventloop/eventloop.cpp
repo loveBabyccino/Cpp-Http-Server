@@ -4,28 +4,40 @@
 
 #include <cassert>
 
-EventLoop::EventLoop(Dispatcher *dispatcher) :
-    _dispatcher(dispatcher),
+EventLoop::EventLoop() :
     _thread_id(std::this_thread::get_id())
 {
 
 }
 
-void EventLoop::validate_thread()
+void EventLoop::thread_validate()
 {
     assert(("thread violation", _thread_id != std::this_thread::get_id()));
 }
 
+void EventLoop::init()
+{
+    thread_validate();
+
+    if (_inited == true)
+        return;
+
+    auto shared_this = shared_from_this();
+    _dispatcher = std::make_shared<Dispatcher>(shared_this);
+    _inited = true;
+}
+
 void EventLoop::run()
 {
-    validate_thread();
+    assert(("event loop has been disturbed", _running == false));
 
-    if (_running == true)
-        return;
+    init();
+
+    _channels.clear();
 
     while (_running == true)
     {
-//        _dispatcher->poll();
+        _dispatcher->epoll(_channels);
     }
 }
 
@@ -33,3 +45,10 @@ void EventLoop::stop()
 {
     _running = false;
 }
+
+EventLoop::ObservedDispatcher EventLoop::dispatcher()
+{
+    return _dispatcher;
+}
+
+

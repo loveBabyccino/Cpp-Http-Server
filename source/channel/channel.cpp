@@ -1,14 +1,11 @@
 #include "channel.h"
 
-Channel::Channel(int fd, int events) :
-    _fd(fd), _events(events)
+Channel::Channel(int fd, int events, int knownEvents) :
+    _fd(fd),
+    _expected_events(events),
+    _knownEvents(knownEvents)
 {
 
-}
-
-void Channel::set_fd(int fd)
-{
-    _fd = fd;
 }
 
 int Channel::fd() const
@@ -16,24 +13,35 @@ int Channel::fd() const
     return _fd;
 }
 
-int Channel::revents() const
+int Channel::knownEvents() const
 {
-    return _revents;
+    return _knownEvents;
 }
 
-void Channel::set_revents(int events)
+void Channel::setKnownEvents(int events)
 {
-    _revents = events;
+    _knownEvents = events;
 }
 
-void Channel::set_val(int val)
+void Channel::setExpectedEvents(int events)
 {
-    _val = val;
+    _expected_events = events;
 }
 
-int Channel::val() const
+int Channel::expectedEvents() const
 {
-    return _val;
+    return _expected_events;
 }
+
+void Channel::handleReadEvent()
+{
+    _read_call_back();
+}
+
+void Channel::handleWriteEvent()
+{
+    _write_call_back();
+}
+
 
 

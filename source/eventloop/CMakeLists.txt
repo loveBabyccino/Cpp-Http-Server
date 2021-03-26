@@ -4,6 +4,7 @@ aux_source_directory(. DIR_LIB_SRCS)
 
 include_directories("../channel")
 include_directories("../dispatcher")
+include_directories(../common)
 
 # 生成链接库
 add_library (EventLoop ${DIR_LIB_SRCS} eventloop.cpp)
